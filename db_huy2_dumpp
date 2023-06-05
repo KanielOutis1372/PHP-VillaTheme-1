@@ -1,0 +1,256 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.0
+-- https://www.phpmyadmin.net/
+--
+-- Máy chủ: 127.0.0.1
+-- Thời gian đã tạo: Th6 05, 2023 lúc 12:25 PM
+-- Phiên bản máy phục vụ: 10.4.24-MariaDB
+-- Phiên bản PHP: 8.1.6
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Cơ sở dữ liệu: `db_huy2`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `categories`
+--
+
+CREATE TABLE `categories` (
+  `CategoryId` int(11) NOT NULL,
+  `CategoryName` varchar(200) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Đang đổ dữ liệu cho bảng `categories`
+--
+
+INSERT INTO `categories` (`CategoryId`, `CategoryName`) VALUES
+(1, 'Cate 1'),
+(2, 'Cate 2'),
+(3, 'Cate 3');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `gallery`
+--
+
+CREATE TABLE `gallery` (
+  `ImageID` int(11) NOT NULL,
+  `ProductID` int(11) NOT NULL,
+  `ImageURL` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Đang đổ dữ liệu cho bảng `gallery`
+--
+
+INSERT INTO `gallery` (`ImageID`, `ProductID`, `ImageURL`) VALUES
+(1, 1, 'img1.jpg'),
+(2, 1, 'img2.jpg'),
+(3, 2, 'img3.jpg'),
+(4, 2, 'img4.jpg'),
+(5, 3, 'img5.jpg');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `productcategories`
+--
+
+CREATE TABLE `productcategories` (
+  `ProductID` int(11) NOT NULL,
+  `CategoryID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Đang đổ dữ liệu cho bảng `productcategories`
+--
+
+INSERT INTO `productcategories` (`ProductID`, `CategoryID`) VALUES
+(1, 1),
+(1, 2),
+(2, 1),
+(3, 2),
+(3, 3);
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `products`
+--
+
+CREATE TABLE `products` (
+  `ID` int(11) NOT NULL,
+  `SKU` varchar(200) NOT NULL,
+  `TITLE` varchar(200) NOT NULL,
+  `PRICE` float DEFAULT NULL,
+  `SALEPRICE` float DEFAULT NULL,
+  `FEATUREDIMAGE` varchar(200) DEFAULT NULL,
+  `DESCRIPTION` varchar(200) DEFAULT NULL,
+  `CREATEDDATE` date DEFAULT NULL,
+  `MODIFIEDDATE` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Đang đổ dữ liệu cho bảng `products`
+--
+
+INSERT INTO `products` (`ID`, `SKU`, `TITLE`, `PRICE`, `SALEPRICE`, `FEATUREDIMAGE`, `DESCRIPTION`, `CREATEDDATE`, `MODIFIEDDATE`) VALUES
+(1, 'SKU001', 'Product 1', 10.99, 8.99, 'img1.jpg', 'Pro 1 desc', '2023-06-01', '2023-06-03'),
+(2, 'SKU002', 'Product 2', 15.99, NULL, 'img2.jpg', 'Pro 2 desc', '2023-06-02', '2023-06-04'),
+(3, 'SKU003', 'Product 3', 20.99, 18.99, 'img3.jpg', 'Pro 3 desc', '2023-06-03', '2023-06-04');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `producttags`
+--
+
+CREATE TABLE `producttags` (
+  `ProductID` int(11) NOT NULL,
+  `TagID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Đang đổ dữ liệu cho bảng `producttags`
+--
+
+INSERT INTO `producttags` (`ProductID`, `TagID`) VALUES
+(1, 1),
+(1, 2),
+(2, 2),
+(3, 1),
+(3, 3);
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `tags`
+--
+
+CREATE TABLE `tags` (
+  `TagId` int(11) NOT NULL,
+  `TagName` varchar(200) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Đang đổ dữ liệu cho bảng `tags`
+--
+
+INSERT INTO `tags` (`TagId`, `TagName`) VALUES
+(1, 'Tag 1'),
+(2, 'Tag 2'),
+(3, 'Tag 3');
+
+--
+-- Chỉ mục cho các bảng đã đổ
+--
+
+--
+-- Chỉ mục cho bảng `categories`
+--
+ALTER TABLE `categories`
+  ADD PRIMARY KEY (`CategoryId`);
+
+--
+-- Chỉ mục cho bảng `gallery`
+--
+ALTER TABLE `gallery`
+  ADD PRIMARY KEY (`ImageID`),
+  ADD KEY `gallery_ibfk_1` (`ProductID`);
+
+--
+-- Chỉ mục cho bảng `productcategories`
+--
+ALTER TABLE `productcategories`
+  ADD PRIMARY KEY (`ProductID`,`CategoryID`),
+  ADD KEY `CategoryID` (`CategoryID`);
+
+--
+-- Chỉ mục cho bảng `products`
+--
+ALTER TABLE `products`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Chỉ mục cho bảng `producttags`
+--
+ALTER TABLE `producttags`
+  ADD PRIMARY KEY (`ProductID`,`TagID`),
+  ADD KEY `TagID` (`TagID`);
+
+--
+-- Chỉ mục cho bảng `tags`
+--
+ALTER TABLE `tags`
+  ADD PRIMARY KEY (`TagId`);
+
+--
+-- AUTO_INCREMENT cho các bảng đã đổ
+--
+
+--
+-- AUTO_INCREMENT cho bảng `categories`
+--
+ALTER TABLE `categories`
+  MODIFY `CategoryId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT cho bảng `gallery`
+--
+ALTER TABLE `gallery`
+  MODIFY `ImageID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT cho bảng `products`
+--
+ALTER TABLE `products`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT cho bảng `tags`
+--
+ALTER TABLE `tags`
+  MODIFY `TagId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- Các ràng buộc cho các bảng đã đổ
+--
+
+--
+-- Các ràng buộc cho bảng `gallery`
+--
+ALTER TABLE `gallery`
+  ADD CONSTRAINT `gallery_ibfk_1` FOREIGN KEY (`ProductID`) REFERENCES `products` (`ID`);
+
+--
+-- Các ràng buộc cho bảng `productcategories`
+--
+ALTER TABLE `productcategories`
+  ADD CONSTRAINT `productcategories_ibfk_1` FOREIGN KEY (`ProductID`) REFERENCES `products` (`ID`),
+  ADD CONSTRAINT `productcategories_ibfk_2` FOREIGN KEY (`CategoryID`) REFERENCES `categories` (`CategoryId`);
+
+--
+-- Các ràng buộc cho bảng `producttags`
+--
+ALTER TABLE `producttags`
+  ADD CONSTRAINT `producttags_ibfk_1` FOREIGN KEY (`ProductID`) REFERENCES `products` (`ID`),
+  ADD CONSTRAINT `producttags_ibfk_2` FOREIGN KEY (`TagID`) REFERENCES `tags` (`TAGID`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
