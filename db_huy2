@@ -1,0 +1,61 @@
+
+use db_huy2;
+CREATE TABLE ProductCategories (
+  ProductID INT,
+  CategoryID INT,
+  PRIMARY KEY (ProductID, CategoryID),
+  FOREIGN KEY (ProductID) REFERENCES Products (ID),
+  FOREIGN KEY (CategoryID) REFERENCES Categories (CategoryID)
+);
+
+CREATE TABLE ProductTags (
+  ProductID INT,
+  TagID INT,
+  PRIMARY KEY (ProductID, TagID),productcategories
+  FOREIGN KEY (ProductID) REFERENCES Products (ID),
+  FOREIGN KEY (TagID) REFERENCES Tags (TagID)
+);
+
+CREATE TABLE Gallery (
+  ImageID INT PRIMARY KEY,
+  ProductID INT,
+  ImageURL VARCHAR(255),
+  FOREIGN KEY (ProductID) REFERENCES Products (ID)
+);
+
+-- liệt kê danh sách
+SELECT P.ID, P.SKU, P.TITLE, P.PRICE, P.SALEPRICE, P.FEATUREDIMAGE, 
+	GROUP_CONCAT(DISTINCT G.GALLAREY SEPARATOR ', ') AS GALLAREY,
+	P.DESCRIPT, P.CREADTEDDATE, P.MODIFIEDDATE,
+	GROUP_CONCAT(DISTINCT C.CATEGORY SEPARATOR ', ') AS CATEGORIES,
+	GROUP_CONCAT(DISTINCT T.TAG SEPARATOR ', ') AS TAGS
+FROM PRODUCTS 		AS P
+INNER JOIN CATEGORIES 	AS C
+INNER JOIN TAGS		AS T
+INNER JOIN GALLAREY	AS G
+ON 
+	P.ID = C.ID 
+	AND P.ID = T.ID 
+	AND P.ID = G.ID
+GROUP BY P.ID;
+
+SELECT P.ID, P.SKU, P.Title, P.Price, P.SalePrice, P.FeaturedImage, P.Description,
+       C.CategoryName, T.TagName, G.ImageURL
+FROM Products P
+LEFT JOIN ProductCategories PC ON P.ID = PC.ProductID
+LEFT JOIN Categories C ON PC.CategoryID = C.CategoryID
+LEFT JOIN ProductTags PT ON P.ID = PT.ProductID
+LEFT JOIN Tags T ON PT.TagID = T.TagID
+LEFT JOIN Gallery G ON P.ID = G.ProductID;
+
+SELECT P.ID, P.SKU, P.Title, P.Price, P.SalePrice, P.FeaturedImage, P.Description, P.CreatedDate, P.ModifiedDate,
+       GROUP_CONCAT(DISTINCT C.CategoryName) AS Categories,
+       GROUP_CONCAT(DISTINCT T.TagName) AS Tags,
+       GROUP_CONCAT(DISTINCT G.ImageURL) AS ImageURLs
+FROM Products P
+LEFT JOIN ProductCategories PC ON P.ID = PC.ProductID
+LEFT JOIN Categories C ON PC.CategoryID = C.CategoryID
+LEFT JOIN ProductTags PT ON P.ID = PT.ProductID
+LEFT JOIN Tags T ON PT.TagID = T.TagID
+LEFT JOIN Gallery G ON P.ID = G.ProductID
+GROUP BY P.ID;
